@@ -29,7 +29,7 @@ void AEnvActor::RandomLighting( float MinIntensity, float MaxIntensity) {
     float RandomZ = FMath::RandRange(0, 360);
 
     // Create new rotation (keeping Z rotation at 0)
-    FRotator NewRotation = FRotator(0.0f, RandomY, RandomZ);
+    FRotator NewRotation = FRotator(RandomY,0.0f , RandomZ);
 
     // Apply the rotation to the directional light
     DirectionalLight->SetActorRotation(NewRotation);

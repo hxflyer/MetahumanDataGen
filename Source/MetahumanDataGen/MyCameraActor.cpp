@@ -53,7 +53,10 @@ AMyCameraActor::AMyCameraActor()
 
     if (GEngine)
     {
-        GEngine->Exec(GetWorld(), TEXT("r.SceneCapture.MaxConcurrentCaptures 16"));
+        GEngine->Exec(GetWorld(), TEXT("r.HairStrands.Simulation 0"));
+        GEngine->Exec(GetWorld(), TEXT("r.HairStrands.SkyLighting.IntegrationType 1"));
+        GEngine->Exec(GetWorld(), TEXT("r.HairStrands.SkyLighting.SampleCount 8")); 
+        
         //GEngine->Exec(GetWorld(), TEXT("r.SceneCapture.DeferredCaptures 0"));
         //GEngine->Exec(GetWorld(), TEXT("r.SceneCapture.DeferredCaptures 2"));
 
@@ -205,14 +208,16 @@ void AMyCameraActor::Tick(float DeltaTime)
 
     if (CaptureStep == 0) {
         UGameplayStatics::SetGlobalTimeDilation(GetWorld(), 0.00000001f);
+        GEngine->Exec(GetWorld(), TEXT("r.HairStrands.SkyLighting.SampleCount 1024"));
         PrepareRTCpature();
-        PrepareCaptureViewportColor();
+        //PrepareCaptureViewportColor();
 
     }else if (CaptureStep == 1) {
         CaptureRTColor();
+        GEngine->Exec(GetWorld(), TEXT("r.HairStrands.SkyLighting.SampleCount 8"));
         CaptureRTDepth();
         CaptureRTNormal();
-        CaptureRTUV();
+        //CaptureRTUV();
         CaptureViewportColor(BaseDir + FString::Printf(TEXT("Color_%s.png"), *SnapshotID));
         SaveLandmarks(BaseDir + FString::Printf(TEXT("Landmarks_%s.txt"), *SnapshotID));
         SaveMats(BaseDir + FString::Printf(TEXT("Mats_%s.txt"), *SnapshotID));

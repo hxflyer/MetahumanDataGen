@@ -6,8 +6,17 @@
 #include "GameFramework/Actor.h"
 #include "GroomComponent.h"
 #include "AssetRegistry/AssetRegistryModule.h"
-
+#include "Materials/MaterialInstanceConstant.h"
 #include "MHActor.generated.h"
+
+USTRUCT()
+struct FHairMaterialGroup
+{
+    GENERATED_BODY()
+
+    UPROPERTY()
+    TArray<UMaterialInstanceConstant*> Materials;
+};
 
 UCLASS()
 class METAHUMANDATAGEN_API AMHActor : public AActor
@@ -43,12 +52,23 @@ public:
 	void ShowFacialHairs();
 	void HideCloths();
 	void ShowCloths();
+	
+	// Individual hair component hide/show functions
+	void HideHair();
+	void ShowHair();
+	void HideFuzz();
+	void ShowFuzz();
+	void HideBeard();
+	void ShowBeard();
 	TArray<FFinalSkinVertex> GetLandmarks();
 	FTransform GetHeadMat();
 
 	void LoadMetahumanByID(int id);
 
 	void RandomExpression();
+	void RandomFaceMat();
+	void RandomHairMat();
+	void RandomEyeMat();
 	int32 MetahumanID = -1;
 
 	// Store found actors
@@ -58,6 +78,14 @@ public:
 	TArray<UMaterialInterface*> FaceMaterials;
 	UPROPERTY()
 	TArray <UBlueprint*> MHAssets;
+	UPROPERTY()
+	TArray<UMaterialInstanceConstant*> FaceSkinMaterials;
+	UPROPERTY()
+	TArray<FHairMaterialGroup> HairMaterialGroups;
+	UPROPERTY()
+	TArray<UMaterialInstanceConstant*> LeftEyeMaterials;
+	UPROPERTY()
+	TArray<UMaterialInstanceConstant*> RightEyeMaterials;
 	UPROPERTY()
 	USkinnedMeshComponent* Body;
 	UPROPERTY()
@@ -85,4 +113,7 @@ private:
 	void FindBones();
 	void SetAnimation();
 
+	bool HairVisible;
+	bool FuzzVisible;
+	bool BeardVisible;
 };
